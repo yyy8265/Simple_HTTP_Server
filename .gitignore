@@ -1,0 +1,23 @@
+# 编译产物
+*.o
+*.a
+*.out
+
+# CMake
+build/
+CMakeCache.txt
+CMakeFiles/
+
+# 可执行文件
+main
+app
+
+# 编辑器
+.vscode/
+.idea/
+
+# 系统文件
+*.swp
+*.bak
+.DS_Store
+1
