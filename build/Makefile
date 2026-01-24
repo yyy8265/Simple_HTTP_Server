@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pwd/cpp_test/camketest
+CMAKE_SOURCE_DIR = /home/pwd/cpp_test/my_learn_projct
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pwd/cpp_test/camketest/build
+CMAKE_BINARY_DIR = /home/pwd/cpp_test/my_learn_projct/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pwd/cpp_test/camketest/build/CMakeFiles /home/pwd/cpp_test/camketest/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pwd/cpp_test/my_learn_projct/build/CMakeFiles /home/pwd/cpp_test/my_learn_projct/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pwd/cpp_test/camketest/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pwd/cpp_test/my_learn_projct/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pwd/cpp_test/camketest
+CMAKE_SOURCE_DIR = /home/pwd/cpp_test/my_learn_projct
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pwd/cpp_test/camketest/build
+CMAKE_BINARY_DIR = /home/pwd/cpp_test/my_learn_projct/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/main.dir/depend.make
@@ -72,30 +72,30 @@ include CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/main.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/main.dir/src/main.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pwd/cpp_test/camketest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/main.cpp.o -MF CMakeFiles/main.dir/src/main.cpp.o.d -o CMakeFiles/main.dir/src/main.cpp.o -c /home/pwd/cpp_test/camketest/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pwd/cpp_test/my_learn_projct/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/main.cpp.o -MF CMakeFiles/main.dir/src/main.cpp.o.d -o CMakeFiles/main.dir/src/main.cpp.o -c /home/pwd/cpp_test/my_learn_projct/src/main.cpp
 
 CMakeFiles/main.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pwd/cpp_test/camketest/src/main.cpp > CMakeFiles/main.dir/src/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pwd/cpp_test/my_learn_projct/src/main.cpp > CMakeFiles/main.dir/src/main.cpp.i
 
 CMakeFiles/main.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pwd/cpp_test/camketest/src/main.cpp -o CMakeFiles/main.dir/src/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pwd/cpp_test/my_learn_projct/src/main.cpp -o CMakeFiles/main.dir/src/main.cpp.s
 
 CMakeFiles/main.dir/src/hello.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/hello.cpp.o: ../src/hello.cpp
 CMakeFiles/main.dir/src/hello.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pwd/cpp_test/camketest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/src/hello.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/hello.cpp.o -MF CMakeFiles/main.dir/src/hello.cpp.o.d -o CMakeFiles/main.dir/src/hello.cpp.o -c /home/pwd/cpp_test/camketest/src/hello.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pwd/cpp_test/my_learn_projct/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/src/hello.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/hello.cpp.o -MF CMakeFiles/main.dir/src/hello.cpp.o.d -o CMakeFiles/main.dir/src/hello.cpp.o -c /home/pwd/cpp_test/my_learn_projct/src/hello.cpp
 
 CMakeFiles/main.dir/src/hello.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/hello.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pwd/cpp_test/camketest/src/hello.cpp > CMakeFiles/main.dir/src/hello.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pwd/cpp_test/my_learn_projct/src/hello.cpp > CMakeFiles/main.dir/src/hello.cpp.i
 
 CMakeFiles/main.dir/src/hello.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/hello.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pwd/cpp_test/camketest/src/hello.cpp -o CMakeFiles/main.dir/src/hello.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pwd/cpp_test/my_learn_projct/src/hello.cpp -o CMakeFiles/main.dir/src/hello.cpp.s
 
 # Object files for target main
 main_OBJECTS = \
@@ -109,7 +109,7 @@ main: CMakeFiles/main.dir/src/main.cpp.o
 main: CMakeFiles/main.dir/src/hello.cpp.o
 main: CMakeFiles/main.dir/build.make
 main: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pwd/cpp_test/camketest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pwd/cpp_test/my_learn_projct/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable main"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -121,6 +121,6 @@ CMakeFiles/main.dir/clean:
 .PHONY : CMakeFiles/main.dir/clean
 
 CMakeFiles/main.dir/depend:
-	cd /home/pwd/cpp_test/camketest/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/pwd/cpp_test/camketest /home/pwd/cpp_test/camketest /home/pwd/cpp_test/camketest/build /home/pwd/cpp_test/camketest/build /home/pwd/cpp_test/camketest/build/CMakeFiles/main.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/pwd/cpp_test/my_learn_projct/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/pwd/cpp_test/my_learn_projct /home/pwd/cpp_test/my_learn_projct /home/pwd/cpp_test/my_learn_projct/build /home/pwd/cpp_test/my_learn_projct/build /home/pwd/cpp_test/my_learn_projct/build/CMakeFiles/main.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/main.dir/depend
 

@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/pwd/cpp_test/camketest/src/hello.cpp" "CMakeFiles/main.dir/src/hello.cpp.o" "gcc" "CMakeFiles/main.dir/src/hello.cpp.o.d"
-  "/home/pwd/cpp_test/camketest/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
+  "/home/pwd/cpp_test/my_learn_projct/src/hello.cpp" "CMakeFiles/main.dir/src/hello.cpp.o" "gcc" "CMakeFiles/main.dir/src/hello.cpp.o.d"
+  "/home/pwd/cpp_test/my_learn_projct/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links.
