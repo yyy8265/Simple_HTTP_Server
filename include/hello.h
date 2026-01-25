@@ -3,4 +3,6 @@
 
 void say_hello();
 
+void another_hello();
+
 #endif
