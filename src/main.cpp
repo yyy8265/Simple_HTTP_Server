@@ -1,8 +1,6 @@
-#include "hello.h"
+#include<iostream>
 
 int main()
 {
-    say_hello();
-    another_hello();
-    return 0;
+std::cout<<"Version from master"<<std::endl;
 }
