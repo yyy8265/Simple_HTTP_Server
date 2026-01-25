@@ -2,5 +2,5 @@
 
 int main()
 {
-std::cout<<"Version from master branch"<<std::endl;
+std::cout<<"Version final"<<std::endl;
 }
