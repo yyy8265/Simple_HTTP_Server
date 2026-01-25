@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(camketest)
+project(my_learn_project)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

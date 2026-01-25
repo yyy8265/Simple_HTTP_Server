@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/pwd/cpp_test/my_learn_projct/include
+CXX_INCLUDES = -I/home/pwd/cpp_test/my_learn_project/include
 
 CXX_FLAGS = -std=gnu++17
 

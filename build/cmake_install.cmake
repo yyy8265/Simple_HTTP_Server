@@ -1,4 +1,4 @@
-# Install script for directory: /home/pwd/cpp_test/my_learn_projct
+# Install script for directory: /home/pwd/cpp_test/my_learn_project
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/pwd/cpp_test/my_learn_projct/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/pwd/cpp_test/my_learn_project/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,6 +1,8 @@
 #include<iostream>
+#include "hello.h"
 
 int main()
 {
-std::cout<<"Version final"<<std::endl;
+    say_hello();
+    another_hello();
 }

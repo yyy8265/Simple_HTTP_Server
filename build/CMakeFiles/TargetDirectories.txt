@@ -1,3 +1,3 @@
-/home/pwd/cpp_test/my_learn_projct/build/CMakeFiles/main.dir
-/home/pwd/cpp_test/my_learn_projct/build/CMakeFiles/edit_cache.dir
-/home/pwd/cpp_test/my_learn_projct/build/CMakeFiles/rebuild_cache.dir
+/home/pwd/cpp_test/my_learn_project/build/CMakeFiles/main.dir
+/home/pwd/cpp_test/my_learn_project/build/CMakeFiles/edit_cache.dir
+/home/pwd/cpp_test/my_learn_project/build/CMakeFiles/rebuild_cache.dir
