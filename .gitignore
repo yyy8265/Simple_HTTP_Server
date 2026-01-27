@@ -21,3 +21,5 @@ app
 *.bak
 .DS_Store
 1
+
+/build

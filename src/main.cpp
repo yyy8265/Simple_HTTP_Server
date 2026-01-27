@@ -6,6 +6,7 @@
 #include<unistd.h>
 #include<thread>
 
+
 int main()
 {
     int server_fd = socket(AF_INET,SOCK_STREAM,0);
@@ -34,7 +35,6 @@ int main()
 
     sockaddr_in clientaddr{};
     socklen_t len=sizeof(clientaddr);
-
     while(true)
     {
         int client_fd=accept(server_fd,nullptr,nullptr);
@@ -43,9 +43,10 @@ int main()
             perror("accpet");
             continue;
         }
-
+    {
+        std::lock_guard<std::mutex> lock(log_mtx);
         std::cout<<"client connected"<<std::endl;
-
+    }
         std::thread t(handle_client,client_fd);
         t.detach();
         

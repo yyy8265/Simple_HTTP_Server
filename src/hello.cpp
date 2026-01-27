@@ -3,23 +3,27 @@
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<unistd.h>
+#include<atomic>
 #include "hello.h"
 
-void say_hello() {
-    std::cout << "Hello CMake C++ Linux" << std::endl;
-}
+std::atomic<int> client_count{0};
+std::mutex count_mtx;
+std::mutex log_mtx;
 
-void another_hello()
-{
-std::cout<<"hello in the new branch"<<std::endl;
-}
 
 void handle_client(int client_fd)
 {
     char buf[1024];
+    int cur=client_count.fetch_add(1)+1;
+    {
+        std::lock_guard<std::mutex> lock(log_mtx);
+        std::cout<<"count= "<<cur<<std::endl;
+    }
+
 
     while(true)
     {
+
         ssize_t n =recv(client_fd,buf,sizeof(buf),0);
         if(n<=0)    break;
 
