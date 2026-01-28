@@ -1,6 +1,5 @@
-#include "hello.h"
+#include "server.h"
 #include<iostream>
-#include<cstring>
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<unistd.h>
@@ -43,10 +42,7 @@ int main()
             perror("accpet");
             continue;
         }
-    {
-        std::lock_guard<std::mutex> lock(log_mtx);
-        std::cout<<"client connected"<<std::endl;
-    }
+
         std::thread t(handle_client,client_fd);
         t.detach();
         
