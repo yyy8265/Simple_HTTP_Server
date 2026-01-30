@@ -17,26 +17,36 @@ set(SERVER_SOURCES
     src/server/HttpServer.cpp
 )
 
-add_executable(http_server
-    main.cpp
-    ${HTTP_SOURCES}
-    ${SERVER_SOURCES}
-)   
+set(STATIC_SOURCES
+    src/static/StaticFileHandler.cpp
+)
+
+set(UTIL_SOURCES
+    src/util/ConfigReader.cpp
+    src/util/Logger.cpp
+)
+
+
 
 find_package(Threads REQUIRED)
-target_link_libraries(http_server PRIVATE Threads::Threads)
 
-add_executable(test_http_parser
-    tests/test_http_parser.cpp
-    src/http/HttpParser.cpp
+# ===== 核心库 =====
+add_library(core
+    ${HTTP_SOURCES}
+    ${SERVER_SOURCES}
+    ${STATIC_SOURCES}
+    ${UTIL_SOURCES}
 )
 
-target_link_libraries(test_http_parser PRIVATE Threads::Threads)
+target_link_libraries(core PRIVATE Threads::Threads)
 
+# ===== 主程序 =====
+add_executable(http_server  main.cpp)
+target_link_libraries(http_server PRIVATE core)
 
-add_executable(test_http_response
-    tests/test_http_response.cpp
-    src/http/HttpResponse.cpp
+# 拷贝静态文件到 build 目录
+add_custom_command(TARGET http_server POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${PROJECT_SOURCE_DIR}/www
+    $<TARGET_FILE_DIR:http_server>/www
 )
-
-target_link_libraries(test_http_response PRIVATE Threads::Threads)

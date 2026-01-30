@@ -6,6 +6,7 @@ class HttpResponse
 {
 public:
     int status=200;
+    std::string statusText="OK";
     std::string body;
     std::map<std::string,std::string> headers;
 

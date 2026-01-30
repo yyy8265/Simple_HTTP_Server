@@ -1,4 +1,6 @@
 #include"http/HttpParser.h"
+#include"util/Logger.h"
+
 #include<sstream>
 
 HttpRequest HttpParser::parse(const std::string& raw)
@@ -15,6 +17,15 @@ HttpRequest HttpParser::parse(const std::string& raw)
 
         std::istringstream ls(line);
         ls>>req.method>>req.url>>req.version;
+
+        Logger::instance().info(
+            "Parsed request line: " + req.method + " " + req.url + " " + req.version
+        );
+    }
+    else
+    {
+        Logger::instance().warn("Empty HTTP request");
+        return req;
     }
 
     while(std::getline(stream,line))
@@ -29,6 +40,10 @@ HttpRequest HttpParser::parse(const std::string& raw)
         if(pos!=std::string::npos)
         {
             req.headers[line.substr(0,pos)]=line.substr(pos+2);
+
+            Logger::instance().info(
+                "Header parsed: " + line.substr(0,pos) + " = " + line.substr(pos+2)
+            );
         }
     }
 

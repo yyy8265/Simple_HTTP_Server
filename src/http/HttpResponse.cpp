@@ -1,15 +1,24 @@
 #include"http/HttpResponse.h"
+#include"util/Logger.h"
+
+#include<ostream>
+#include<sstream>
 
 std::string HttpResponse::toString()const
 {
-    std::string statusLine="HTTP/1.1 200 OK\r\n";
-    std::string headerStr;
-
-    for(const auto&[k,v]:headers)
+    std::ostringstream oss;
+    oss << "HTTP/1.1 " << status << " " << statusText << "\r\n";
+    for(auto& [k,v]:headers)
     {
-        headerStr=k+": "+v+"\r\n";
+        oss<<k<<": "<<v<<"\r\n";
     }
 
-    return statusLine+headerStr+"\r\n"+body;
+    oss<<"\r\n"<<body;
 
+    Logger::instance().info(
+        "Response built: status=" + std::to_string(status) +
+        ", body_size=" + std::to_string(body.size())
+    );
+
+    return oss.str();
 }
