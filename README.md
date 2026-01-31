@@ -1,153 +1,121 @@
-# 🧩 Simple C++ HTTP Server
+# Simple HTTP Server (C++)
 
-一个基于 **Linux Socket + C++17** 实现的轻量级 HTTP 服务器示例项目，  
-重点在于 **清晰的模块拆分、职责划分和可测试设计**。
-
----
-
-## ✨ 项目特性
-
-- 使用 **TCP Socket** 实现基础 HTTP/1.1 服务
-    
-- HTTP 请求解析模块 **完全独立**，可单元测试
-    
-- 服务器逻辑与协议解析 **解耦**
-    
-- 基于 `std::thread` 的简单并发模型
-    
-- 使用 **CMake** 构建，结构清晰，易于扩展
-    
+一个基于 **C++ 与 POSIX Socket** 实现的简易 HTTP 静态文件服务器，用于学习网络编程、HTTP 协议基础以及模块化 C++ 工程结构。
 
 ---
 
-## 📁 项目结构
+## 功能概述
+
+- 支持 HTTP/1.1 GET 请求
+    
+- 提供静态文件服务
+    
+- 可配置监听端口与网站根目录
+    
+- 多线程并发处理客户端连接
+    
+- 自动识别常见 MIME 类型
+    
+- 线程安全日志系统（控制台 + 文件）
+
+---
+
+## 项目结构
 
 ```
-http_server/ 
-│ 
+my_http_server/ 
 ├── CMakeLists.txt 
+├── config.txt                 # 服务器配置文件 
+├── README.md 
+├── www/                        # 静态文件根目录 
+│   ├── index.html 
+│   └── test.txt 
 │ 
 ├── include/ 
-│   ├── server/ 
+│   ├── http/                   # HTTP 协议相关 
+│   │   ├── HttpParser.h 
+│   │   ├── HttpRequest.h 
+│   │   └── HttpResponse.h 
+│   │ 
+│   ├── server/                 # 服务器核心 
 │   │   └── HttpServer.h 
 │   │ 
-│   └── http/ 
-│       ├── HttpRequest.h 
-│       ├── HttpResponse.h 
-│       └── HttpParser.h 
-├── src/ 
-│   ├── server/ 
-│   │   └── HttpServer.cpp 
+│   ├── static/                 # 静态文件服务 
+│   │   └── StaticFileHandler.h 
 │   │ 
-│   └── http/ 
-│       ├── HttpParser.cpp 
-│       └── HttpResponse.cpp 
-├── tests/ 
-│   └── test_http_parser.cpp 
+│   └── util/                   # 工具模块 
+│       ├── ConfigReader.h 
+│       └── Logger.h 
 │ 
-└── main.cpp
+├── src/                        # 对应实现文件 
+│   ├── http/ 
+│   ├── server/ 
+│   ├── static/ 
+│   └── util/ 
+│ ├── main.cpp                    # 程序入口 
+└── tests/                      # 测试代码     
+	└── test_http_parser.cpp
 ```
 
 ---
 
-## 🧠 模块说明
+## 构建与运行
 
-### HttpServer
+### 构建
 
-- 负责 TCP 监听、连接接收与生命周期管理
-    
-- 每个客户端连接由独立线程处理
-    
-- 不参与 HTTP 协议解析
-    
+`mkdir build cd build cmake .. cmake --build .`
 
-### HttpParser
+### 运行
 
-- 负责将原始 HTTP 请求字符串解析为结构化数据
-    
-- 与 socket、线程完全无关
-    
-- 支持单元测试
-    
+`./main`
 
-### HttpRequest / HttpResponse
+或指定配置文件路径：
 
-- 表示 HTTP 请求与响应的数据结构
-    
-- 响应通过 `toString()` 序列化为标准 HTTP 报文
-    
-
----
-
-## 🚀 构建与运行
-
-### 1️⃣ 构建项目
-
-`mkdir build cd build cmake .. make`
-
-### 2️⃣ 运行服务器
-
-`./http_server`
+`./main ../config.txt`
 
 浏览器访问：
 
-`http://localhost:8080`
+`http://localhost:8080/`
 
 ---
 
-## 🧪 单元测试
+## 配置文件说明
 
-项目为 `HttpParser` 提供了简单的单元测试（基于 `assert`）：
+`config.txt` 示例：
 
-`./test_http_parser`
+`port = 8080 root = ./www`
 
-测试内容包括：
-
-- HTTP 请求行解析
+- `port`：服务器监听端口
     
-- Header 解析
-    
-- CRLF 边界处理
+- `root`：静态文件根目录
     
 
 ---
 
-## 🔧 技术栈
+## 模块说明
 
-- C++17
+- `http`：HTTP 请求解析与响应构造
     
-- POSIX Socket（Linux）
+- `server`：服务器核心逻辑与连接管理
     
-- CMake
+- `static`：静态文件请求处理
     
-- std::thread
-    
-
----
-
-## 📌 后续可扩展方向
-
-- 路由系统（GET /path → handler）
-    
-- 静态文件服务器
-    
-- 线程池替代 `std::thread::detach`
-    
-- 更完整的 HTTP 状态码支持
-    
-- 使用 epoll 实现高并发模型
+- `util`：配置读取与日志系统
     
 
 ---
 
-## 📖 项目定位说明
+## 当前限制
 
-> 本项目是一个 **学习向、工程结构清晰的 HTTP Server 示例**，  
-> 重点在于理解：
-> 
-> - 网络编程基本流程
->     
-> - HTTP 报文结构
->     
-> - 模块解耦与可测试设计
->
+- 仅支持 GET 请求
+    
+- 不支持 Keep-Alive、HTTPS、动态内容
+    
+- HTTP 协议解析为简化实现
+    
+
+---
+
+## 说明
+
+本项目用于学习和实验，不面向生产环境。
