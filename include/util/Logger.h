@@ -1,9 +1,11 @@
 #pragma once
+
 #include<string>
 #include<mutex>
 #include<fstream>
 #include<iostream>
 
+// 日志级别
 enum class LogLevel
 {
     INFO,
@@ -11,6 +13,7 @@ enum class LogLevel
     ERROR
 };
 
+// 线程安全单例日志器
 class Logger
 {
 public:

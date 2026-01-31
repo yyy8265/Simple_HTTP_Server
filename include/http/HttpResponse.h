@@ -1,7 +1,9 @@
 #pragma once
+
 #include<string>
 #include<map>
 
+// HTTP 响应对象
 class HttpResponse
 {
 public:

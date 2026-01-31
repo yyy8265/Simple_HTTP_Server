@@ -9,7 +9,7 @@ HttpRequest HttpParser::parse(const std::string& raw)
     std::istringstream stream(raw);
     std::string line;
 
-    // 请求行
+    // 解析请求行
     if(std::getline(stream,line))
     {
         if(!line.empty()&&line.back()=='\r')
@@ -28,6 +28,7 @@ HttpRequest HttpParser::parse(const std::string& raw)
         return req;
     }
 
+    // 解析请求头
     while(std::getline(stream,line))
     {
         if(line=="\r"||line.empty())
