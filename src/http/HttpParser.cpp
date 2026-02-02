@@ -2,6 +2,7 @@
 #include"util/Logger.h"
 
 #include<sstream>
+#include<algorithm>
 
 HttpRequest HttpParser::parse(const std::string& raw)
 {
@@ -40,11 +41,25 @@ HttpRequest HttpParser::parse(const std::string& raw)
         auto pos=line.find(":");
         if(pos!=std::string::npos)
         {
-            req.headers[line.substr(0,pos)]=line.substr(pos+2);
+            std::string key=line.substr(0,pos);
+            std::string value=line.substr(pos+1);
 
+            // 去掉前后空格
+            key.erase(0, key.find_first_not_of(" \t"));
+            key.erase(key.find_last_not_of(" \t") + 1);
+
+            value.erase(0, value.find_first_not_of(" \t"));
+            value.erase(value.find_last_not_of(" \t") + 1);
+
+            // 统一 key 小写
+            std::transform(key.begin(),key.end(),key.begin(),::tolower);
+
+            req.headers[key]=value;
+            
             Logger::instance().info(
-                "Header parsed: " + line.substr(0,pos) + " = " + line.substr(pos+2)
+                "Header parsed: " + key + " = " + value
             );
+
         }
     }
 

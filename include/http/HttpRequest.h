@@ -11,4 +11,20 @@ struct HttpRequest
     std::string version;    // HTTP 版本
     std::map<std::string,std::string> headers;  // 请求头
 
+    bool hasBody() const
+    {
+        auto it=headers.find("content-length");
+        return it!=headers.end()&&std::stoi(it->second)>0;
+    }
+
+    size_t contentLength() const
+    {
+        auto it=headers.find("content-length");
+        if(it!=headers.end()&&!it->second.empty())
+        {
+            return std::stoul(it->second);
+        }
+        return 0;
+    }
+
 };

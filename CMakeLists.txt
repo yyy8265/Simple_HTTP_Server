@@ -24,6 +24,7 @@ set(STATIC_SOURCES
 set(UTIL_SOURCES
     src/util/ConfigReader.cpp
     src/util/Logger.cpp
+    src/util/ThreadPool.cpp
 )
 
 

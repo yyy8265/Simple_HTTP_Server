@@ -1,6 +1,7 @@
 #pragma once
 
 #include"static/StaticFileHandler.h"
+#include"util/ThreadPool.h"
 
 #include<cstdint>
 
@@ -15,6 +16,8 @@ private:
     int serverFd;      // 监听 socket
     uint16_t port;
     StaticFileHandler staticService;
+
+    ThreadPool pool{4};
 
     // 处理单个客户端连接
     void handleClient(int clinetFd);

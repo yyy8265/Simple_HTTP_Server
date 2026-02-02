@@ -8,11 +8,14 @@
 #include<netinet/in.h>
 #include<unistd.h>
 #include<thread>
+#include<signal.h>
+#include<cstring>
 
 HttpServer::HttpServer(uint16_t p,std::string rootDir):port(p),staticService(std::move(rootDir)){}
 
 void HttpServer::start()
 {
+    signal(SIGPIPE,SIG_IGN);
     serverFd=socket(AF_INET,SOCK_STREAM,0);
     if(serverFd<0)
     {
@@ -46,12 +49,35 @@ void HttpServer::start()
             continue;
         }
 
-        std::thread(&HttpServer::handleClient,this,clientFd).detach();
+        pool.enqueue([this,clientFd]{
+            try
+            {
+                handleClient(clientFd);
+            }
+            catch(const std::exception& e)
+            {
+                Logger::instance().error("Exception in client thread: " + std::string(e.what()));
+                close(clientFd);
+            }
+            catch(...)
+            {
+                Logger::instance().error("Unknown exception in client thread");
+                close(clientFd);
+            }  
+        });
     }
 }
 
 void HttpServer::handleClient(int clientFd)
 {
+    struct timeval timeout{};
+    timeout.tv_sec=5;   // 5秒超时
+    timeout.tv_usec=0;
+    if(setsockopt(clientFd,SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout)))
+    {
+        Logger::instance().error("Failed to set recv timeout: " + std::string(strerror(errno)));
+    }
+
     char buffer[4096];
     std::string raw;
 
@@ -59,35 +85,88 @@ void HttpServer::handleClient(int clientFd)
     while(true)
     {
         int n=recv(clientFd,buffer,sizeof(buffer),0);
-        if(n<=0)
+        if(n==0)
+        {
+            Logger::instance().warn("Client disconnected gracefully");
             break;
+        }
+        else if(n<0)
+        {
+            Logger::instance().warn("Client connection error: " + std::string(strerror(errno)));
+            break;
+        }
 
         raw.append(buffer,n);
-        if(raw.find("\r\n\r\n")!=std::string::npos)
+        
+        auto pos=raw.find("\r\n\r\n");
+        if(pos!=std::string::npos)
         {
+            raw=raw.substr(0,pos+4);
             break;
         }
     }
 
-    HttpRequest req=HttpParser::parse(raw);
+    HttpRequest req;
+    try
+    {
+        req=HttpParser::parse(raw);
+    }
+    catch(const std::exception& e)
+    {
+        Logger::instance().warn(std::string("Failed to parse request: ") + e.what());
+        close(clientFd);
+        return;
+    }
 
     Logger::instance().info(req.method+" "+req.url);
 
-    HttpResponse resp;
-    if(!staticService.serve(req,resp))
+    if(req.hasBody())
     {
-        resp.status=400;
-        resp.statusText="Bad Request";
-        Logger::instance().warn("Bad request: " + req.url);
+        Logger::instance().warn(
+            "Request declares a body (Content-Length=" +
+            std::to_string(req.contentLength()) +
+            "), but server only supports GET without body. Body will be ignored."
+        );
+    }
+
+    HttpResponse resp;
+    if(req.method!="GET")
+    {
+        // 方法不被支持
+        resp.status=405;
+        resp.statusText="Method Not Allowed";
+
+        resp.headers["Allow"]="GET";
+
+        resp.body="405 Method Not Allowed";
+        resp.headers["Content-Length"]=std::to_string(resp.body.size());
+
+        Logger::instance().warn("Method not allowed: "+req.method);
     }
     else
     {
-        Logger::instance().info("Served: " + req.url);
+        if(!staticService.serve(req,resp))
+        {
+            resp.status=404;
+            resp.statusText="Not Found";
+            resp.body="404 Not Found";
+            resp.headers["Content-Length"]=std::to_string(resp.body.size());
+
+            Logger::instance().warn("Static file not found: " + req.url);
+        }
+        else
+        {
+            Logger::instance().info("Served: " + req.url);
+        }
     }
 
 
     std::string out=resp.toString();
-    send(clientFd, out.c_str(), out.size(), 0);
+    ssize_t sent = send(clientFd, out.c_str(), out.size(), 0);
+    if(sent<0)
+    {
+        Logger::instance().warn("Failed to send response: " + std::string(strerror(errno)));
+    }
     close(clientFd);
 
 }

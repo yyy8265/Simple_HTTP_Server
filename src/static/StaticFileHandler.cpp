@@ -4,8 +4,12 @@
 #include<fstream>
 #include<sstream>
 #include<iostream>
+#include<algorithm>
 #include<unordered_map>
 #include<ostream>
+#include<filesystem>
+
+namespace fs=std::filesystem;
 
 bool StaticFileHandler::serve(const HttpRequest& req,HttpResponse& resp)
 {
@@ -15,36 +19,62 @@ bool StaticFileHandler::serve(const HttpRequest& req,HttpResponse& resp)
         return false;
     }
 
-    std::string path=rootDir+req.url;
-    if(path.back()=='/')
+    try
     {
-        path+="index.html";
-    }
+        fs::path root=fs::canonical(rootDir);
+        fs::path requested=fs::path(req.url).relative_path();
 
-    std::ifstream file(path,std::ios::binary);
-    if(!file)
-    {
-        resp.status=404;
-        resp.statusText="Not Found";
-        resp.body="404 Not Found";
+        if(requested.empty()||requested.filename()=="/")
+        {
+            requested/="index.html";
+        }
+
+        fs::path fullPath=fs::canonical(root/requested);
+
+        if(fullPath.string().find(root.string())!=0)
+        {
+            Logger::instance().warn("Path traversal attempt: " + req.url);
+
+            resp.status=403;
+            resp.statusText="Forbidden";
+            resp.body="403 Forbidden";
+            resp.headers["Content-Length"]=std::to_string(resp.body.size());
+
+            return true;
+        }
+
+        std::ifstream file(fullPath,std::ios::binary);
+        if(!file)
+        {
+            throw std::runtime_error("File not found");
+        }
+
+        std::ostringstream ss;
+        ss<<file.rdbuf();
+
+        resp.body=ss.str();
+        resp.headers["Content-Type"]=getMimeType(fullPath.string());
         resp.headers["Content-Length"]=std::to_string(resp.body.size());
 
-        Logger::instance().warn("Static file not found: " + path);
+        Logger::instance().info(
+            "Serving static file: " + fullPath.string() +
+            ", size=" + std::to_string(resp.body.size())
+        );
+
         return true;
     }
+    catch(const std::exception& e)
+    {
+        Logger::instance().warn("Static file error: " + std::string(e.what()));
 
-    std::ostringstream ss;
-    ss<<file.rdbuf();
-    resp.body=ss.str();
-    resp.headers["Content-Type"]=getMimeType(path);
-    resp.headers["Content-Length"]=std::to_string(resp.body.size());
+        resp.status=404;
+        resp.statusText="Not Found";
+        resp.body = "404 Not Found";
+        resp.headers["Content-Length"]=std::to_string(resp.body.size());
 
-    Logger::instance().info(
-        "Serving static file: " + path +
-        ", size=" + std::to_string(resp.body.size())
-    );
-
-    return true;
+        return true;
+    }
+    
 }
 
 std::string StaticFileHandler::getMimeType(const std::string& path)
@@ -69,6 +99,9 @@ std::string StaticFileHandler::getMimeType(const std::string& path)
     }
 
     std::string ext=path.substr(pos);
+
+    std::transform(ext.begin(),ext.end(),ext.begin(),::tolower);
+
     auto it=mimeType.find(ext);
     if(it!=mimeType.end())
     {
