@@ -11,6 +11,9 @@
 #include<signal.h>
 #include<cstring>
 
+constexpr size_t MAX_HEADER_SIZE=8*1024;
+
+
 HttpServer::HttpServer(uint16_t p,std::string rootDir):port(p),staticService(std::move(rootDir)){}
 
 void HttpServer::start()
@@ -73,31 +76,37 @@ void HttpServer::handleClient(int clientFd)
     struct timeval timeout{};
     timeout.tv_sec=5;   // 5秒超时
     timeout.tv_usec=0;
-    if(setsockopt(clientFd,SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout)))
-    {
-        Logger::instance().error("Failed to set recv timeout: " + std::string(strerror(errno)));
-    }
+
+    setsockopt(clientFd,SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
+    setsockopt(clientFd,SOL_SOCKET,SO_SNDTIMEO,&timeout,sizeof(timeout));
 
     char buffer[4096];
     std::string raw;
+    raw.reserve(2048);
 
     // 接收 HTTP 请求
     while(true)
     {
-        int n=recv(clientFd,buffer,sizeof(buffer),0);
-        if(n==0)
+        ssize_t n=recv(clientFd,buffer,sizeof(buffer),0);
+        if(n<=0)
         {
-            Logger::instance().warn("Client disconnected gracefully");
-            break;
-        }
-        else if(n<0)
-        {
-            Logger::instance().warn("Client connection error: " + std::string(strerror(errno)));
-            break;
-        }
+            if(n<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
+            {
+                Logger::instance().warn("Request timeout on fd: " + std::to_string(clientFd));
+            }
+            close(clientFd);
+            return;
+        }  
 
         raw.append(buffer,n);
         
+        if(raw.size()>MAX_HEADER_SIZE)
+        {
+            Logger::instance().error("Request header too large");
+            close(clientFd);
+            return;
+        }
+
         auto pos=raw.find("\r\n\r\n");
         if(pos!=std::string::npos)
         {

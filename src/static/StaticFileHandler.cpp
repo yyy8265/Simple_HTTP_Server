@@ -22,16 +22,21 @@ bool StaticFileHandler::serve(const HttpRequest& req,HttpResponse& resp)
     try
     {
         fs::path root=fs::canonical(rootDir);
-        fs::path requested=fs::path(req.url).relative_path();
+        fs::path requested=fs::path(req.url).lexically_normal();
 
-        if(requested.empty()||requested.filename()=="/")
+        if(requested.is_absolute())
+        {
+            requested=requested.relative_path();
+        }
+
+        if(requested.empty()||req.url.back()=='/')
         {
             requested/="index.html";
         }
 
-        fs::path fullPath=fs::canonical(root/requested);
+        fs::path fullPath=fs::weakly_canonical(root/requested);
 
-        if(fullPath.string().find(root.string())!=0)
+        if(fullPath.native().compare(0,root.native().size(),root.native())!=0)
         {
             Logger::instance().warn("Path traversal attempt: " + req.url);
 
@@ -39,22 +44,44 @@ bool StaticFileHandler::serve(const HttpRequest& req,HttpResponse& resp)
             resp.statusText="Forbidden";
             resp.body="403 Forbidden";
             resp.headers["Content-Length"]=std::to_string(resp.body.size());
+            resp.headers["Connection"] = "close";
+
 
             return true;
         }
 
-        std::ifstream file(fullPath,std::ios::binary);
-        if(!file)
+        if (!fs::exists(fullPath) || !fs::is_regular_file(fullPath)) 
         {
-            throw std::runtime_error("File not found");
+            Logger::instance().info("Static file not found: " + fullPath.string() +" (url=" + req.url + ")");
+
+            resp.status = 404;
+            resp.statusText = "Not Found";
+            resp.body = "404 Not Found";
+            resp.headers["Content-Length"] = std::to_string(resp.body.size());
+            resp.headers["Connection"] = "close";
+
+            return true;
         }
 
-        std::ostringstream ss;
-        ss<<file.rdbuf();
+        // 使用二进制模式打开，并移动指针到末尾获取大小
+        std::ifstream file(fullPath,std::ios::binary|std::ios::ate);
+        if(!file)
+        {
+            throw std::runtime_error("File open failed");
+        }
 
-        resp.body=ss.str();
+        std::streamsize size=file.tellg();
+        file.seekg(0,std::ios::beg);
+        
+        resp.body.resize(size);
+        if(!file.read(&resp.body[0],size))
+        {
+            throw std::runtime_error("File read error");
+        }
+
         resp.headers["Content-Type"]=getMimeType(fullPath.string());
         resp.headers["Content-Length"]=std::to_string(resp.body.size());
+        resp.headers["Connection"]="close";
 
         Logger::instance().info(
             "Serving static file: " + fullPath.string() +
