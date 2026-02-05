@@ -76,7 +76,13 @@ void Config::LoadFromPath(const std::string& path)
         {
             try
             {
-                port = static_cast<uint16_t>(std::stoi(value));
+		int p=std::stoi(value);
+		if(p<=0||p>65535)
+		{
+			throw std::out_of_range("port out of range");
+		}
+                port=static_cast<uint16_t>(p);
+
                 Logger::instance().info(
                     "Config: port set to " + std::to_string(port)
                 );

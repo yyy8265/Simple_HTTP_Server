@@ -14,7 +14,18 @@ struct HttpRequest
     bool hasBody() const
     {
         auto it=headers.find("content-length");
-        return it!=headers.end()&&std::stoi(it->second)>0;
+	if(it==headers.end())
+	{
+		return false;
+	}
+	try
+	{
+		return it!=headers.end()&&std::stoi(it->second)>0;
+	}
+        catch(...)
+	{
+		return false;
+	}
     }
 
     size_t contentLength() const

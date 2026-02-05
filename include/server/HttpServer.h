@@ -10,6 +10,9 @@ class HttpServer
 {
 public:
     explicit HttpServer(uint16_t port,std::string rootDir);
+
+    ~HttpServer();
+
     void start();
 
 private:

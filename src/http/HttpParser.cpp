@@ -17,7 +17,16 @@ HttpRequest HttpParser::parse(const std::string& raw)
             line.pop_back();
 
         std::istringstream ls(line);
-        ls>>req.method>>req.url>>req.version;
+
+        if(!(ls>>req.method>>req.url>>req.version))
+	{
+		throw std::runtime_error("Invalid HTTP request line");
+	}
+
+	if(req.version.substr(0,5)!="HTTP/")
+	{
+		throw std::runtime_error("Invalid HTTP version");
+	}
 
         Logger::instance().info(
             "Parsed request line: " + req.method + " " + req.url + " " + req.version

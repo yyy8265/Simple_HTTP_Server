@@ -51,6 +51,8 @@ void ThreadPool::enqueue(std::function<void()> task)
 {
     {
         std::lock_guard<std::mutex> lock(mtx);
+	if(stop)
+		return;
         tasks.push(std::move(task));
     }
 
