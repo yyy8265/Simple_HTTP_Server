@@ -10,6 +10,7 @@
 #include<thread>
 #include<signal.h>
 #include<cstring>
+#include<cerrno>
 
 constexpr size_t MAX_HEADER_SIZE=8*1024;
 

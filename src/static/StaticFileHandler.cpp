@@ -8,6 +8,7 @@
 #include<unordered_map>
 #include<ostream>
 #include<filesystem>
+#include<cctype>
 
 namespace fs=std::filesystem;
 
@@ -29,9 +30,9 @@ bool StaticFileHandler::serve(const HttpRequest& req,HttpResponse& resp)
             requested=requested.relative_path();
         }
 
-        if(requested.empty()||req.url.back()=='/')
+        if(req.url.empty()||requested.empty()||req.url.back()=='/')
         {
-            requested/="index.html";
+            requested /="index.html";
         }
 
         fs::path fullPath=fs::weakly_canonical(root/requested);

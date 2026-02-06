@@ -1,11 +1,14 @@
 #include"server/HttpServer.h"
 #include"util/ConfigReader.h"
 #include"util/Logger.h"
-
 #include<sstream>
+#include<filesystem>
+
+namespace fs = std::filesystem;
 
 int main(int argc,char** argv)
 {
+    fs::create_directories("./logs");
     Logger::instance().setLogFile("./logs/server.log");
 
     std::string configPath = "./config.txt";
