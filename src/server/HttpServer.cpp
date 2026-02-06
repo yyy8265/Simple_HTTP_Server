@@ -17,6 +17,14 @@ constexpr size_t MAX_HEADER_SIZE=8*1024;
 
 HttpServer::HttpServer(uint16_t p,std::string rootDir):port(p),staticService(std::move(rootDir)){}
 
+HttpServer::~HttpServer()
+{
+	if(serverFd>=0)
+	{
+		close(serverFd);
+	}
+}
+
 void HttpServer::start()
 {
     signal(SIGPIPE,SIG_IGN);
@@ -41,7 +49,7 @@ void HttpServer::start()
         return;
     }
 
-    listen(serverFd,5);
+    listen(serverFd,SOMAXCONN);
     Logger::instance().info("HTTP server listening on port "+std::to_string(port));
 
     while(true)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include<string>
+#include<cstdint>
 
 //配置文件读取器
 class Config
