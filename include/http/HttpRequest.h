@@ -18,6 +18,7 @@ struct HttpRequest
 	{
 		return false;
 	}
+    
 	try
 	{
 		return it!=headers.end()&&std::stoi(it->second)>0;

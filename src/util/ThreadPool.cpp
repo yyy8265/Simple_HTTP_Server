@@ -1,4 +1,5 @@
 #include"util/ThreadPool.h"
+#include"util/Logger.h"
 
 ThreadPool::ThreadPool(size_t numThreads):stop(false)
 {
@@ -23,12 +24,21 @@ ThreadPool::ThreadPool(size_t numThreads):stop(false)
                     task=std::move(tasks.front());
                     tasks.pop();
                 }
+
                 try
                 {
                     task();
                 }
+                catch(const std::exception& e)
+                {                
+                    Logger::instance().error(
+                        std::string("ThreadPool task exception: ") + e.what()
+                    );
+                }
                 catch(...)
-                {                }        
+                {
+                    Logger::instance().error("ThreadPool task unknown exception");
+                }
             }   
         });
     }
